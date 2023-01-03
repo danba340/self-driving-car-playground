@@ -1,0 +1,16 @@
+{
+  "name": "Car AI Playground",
+  "short_name": "Car AI",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/car.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
