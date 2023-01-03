@@ -3,7 +3,7 @@ const SENSOR_COUNT = getSensorCount()
 const SENSOR_ANGLE = getSensorAngle()
 const SENSOR_LENGTH = getSensorLength()
 const IS_PORTRAIT = window.innerHeight > window.innerWidth
-const CANVAS_WIDTH = IS_PORTRAIT ? window.innerWidth / 2 : 400;
+const CANVAS_WIDTH = IS_PORTRAIT ? 300 : 300;
 const carWidth = CANVAS_WIDTH / (CANVAS_WIDTH / 60)
 const carHeight = carWidth * 1.56
 let hasShownWin = false
@@ -63,27 +63,28 @@ if (localStorage.getItem("bestBrain")) {
     }
 }
 
-const traffic = [
-    new Car(road.getLaneCenter(1), -100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(1), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(1), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(1), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(1), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(1), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(0), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-    new Car(road.getLaneCenter(2), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-];
+const traffic = getTraffic()
+// const traffic = [
+//     new Car(road.getLaneCenter(1), -100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(1), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(1), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(1), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(1), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(1), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(0), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+//     new Car(road.getLaneCenter(2), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
+// ];
 
 animate();
 
@@ -142,6 +143,20 @@ function setSensorLength(v) {
     localStorage.setItem("sensor-length", v);
 }
 
+function setTraffic(v) {
+    localStorage.setItem("traffic", JSON.stringify(v));
+}
+
+function getTraffic(v) {
+    let trafficTemplate = localStorage.getItem('traffic')
+    if (trafficTemplate) {
+        return templateToTraffic(JSON.parse(trafficTemplate))
+    }
+    trafficTemplate = generateTrafficTemplate(20)
+    setTraffic(trafficTemplate)
+    return templateToTraffic(trafficTemplate)
+}
+
 function getSensorLength() {
     return parseInt(localStorage.getItem("sensor-length")) || 150
 }
@@ -152,6 +167,37 @@ function generateCars(N) {
         cars.push(new Car(road.getLaneCenter(1), 100, carWidth, carHeight, "AI", CANVAS_WIDTH / 75, getRandomColor()));
     }
     return cars;
+}
+
+function templateToTraffic(template) {
+    return template.map(({ lane, y }) => {
+        return new Car(road.getLaneCenter(lane), y, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor())
+    })
+}
+
+function newTraffic() {
+    const trafficTemplate = generateTrafficTemplate(20)
+    setTraffic(trafficTemplate)
+    location.reload()
+}
+
+function generateTrafficTemplate(rows) {
+    const variants = [
+        [1],
+        [0, 1],
+        [0, 2],
+        [1, 2],
+    ]
+    const startY = -100
+    const traffic = [];
+    for (let i = 0; i < rows; i++) {
+        const y = startY - i * 400
+        const variant = variants[Math.floor(Math.random() * variants.length)]
+        for (const lane of variant) {
+            traffic.push({ lane, y })
+        }
+    }
+    return traffic
 }
 
 function animate(time) {

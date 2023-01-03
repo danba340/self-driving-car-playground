@@ -10,7 +10,6 @@
     <canvas id="carCanvas"></canvas>
     <div id="side">
         <div id="info">
-            <h3>Info</h3>
             <div>
                 <span>Generation </span><span id="generation">1</span>
             </div>
@@ -26,14 +25,21 @@
         <div id="controls">
             <h3>Controls</h3>
             <div class="control-buttons">
-                <div>
+                <div class="flex items-center gap-m">
                     <button onclick="location.reload()">🔄</button>
+                    <p>New batch</p>
                 </div>
-                <div>
+                <div class="flex items-center gap-m">
                     <button onclick="save();location.reload()">💾</button>
+                    <p>Save best car</p>
                 </div>
-                <div>
+                <div class="flex items-center gap-m">
                     <button onclick="discard()">🗑️</button>
+                    <p>Start over</p>
+                </div>
+                <div class="flex items-center gap-m">
+                    <button onclick="newTraffic()">🚦</button>
+                    <p>New traffic</p>
                 </div>
             </div>
             <div>
