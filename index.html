@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Self-driving car - No libraries</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="networkCanvas"></canvas>
+    <canvas id="carCanvas"></canvas>
+    <div id="side">
+        <div id="info">
+            <h3>Info</h3>
+            <div>
+                <span>Generation </span><span id="generation">1</span>
+            </div>
+            <div class="progress">
+                <span>Progress</span>
+                <span>
+                    <div id="progressBar">
+                        <div id="progress"></div>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div id="controls">
+            <h3>Controls</h3>
+            <div class="control-buttons">
+                <div>
+                    <button onclick="location.reload()">🔄</button>
+                </div>
+                <div>
+                    <button onclick="save();location.reload()">💾</button>
+                </div>
+                <div>
+                    <button onclick="discard()">🗑️</button>
+                </div>
+            </div>
+            <div>
+                <label for="randomization">Mutation</label>
+                <select name="rates" id="randomization">
+                    <option value="0.0125">Very Low</option>
+                    <option value="0.025">Low</option>
+                    <option selected value="0.05">Medium</option>
+                    <option value="0.1">High</option>
+                    <option value="0.2">Very High</option>
+                </select>
+            </div>
+        </div>
+        <div id="settings">
+
+            <h3>Sensor Settings</h3>
+            <div>
+                <label for="sensors">Sensors</label>
+                <select name="sensors" id="sensors">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option selected value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </div>
+            <div>
+                <label for="sensor-angle">Sensor angle</label>
+
+                <select name="angles" id="sensor-angle">
+                    <option value="45">45</option>
+                    <option value="67.5">67.5</option>
+                    <option value="90">90</option>
+                    <option value="135">135</option>
+                    <option selected value="180">180</option>
+                    <option value="270">270</option>
+                    <option value="360">360</option>
+                </select>
+            </div>
+            <div>
+                <label for="sensor-length">Sensor length</label>
+
+                <select name="lengths" id="sensor-length">
+                    <option value="100">100</option>
+                    <option value="125">125</option>
+                    <option selected value="150">150</option>
+                    <option value="200">200</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <script src="visualizer.js"></script>
+    <script src="network.js"></script>
+    <script src="sensor.js"></script>
+    <script src="utils.js"></script>
+    <script src="road.js"></script>
+    <script src="controls.js"></script>
+    <script src="car.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

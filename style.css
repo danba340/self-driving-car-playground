@@ -1,0 +1,75 @@
+html {
+  height: 100vh;
+}
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  display: flex;
+  justify-content: center;
+  font-size: 32px;
+  height: 100vh;
+  font-family: monospace;
+}
+
+select {
+  font-size: 32px;
+  padding: 8px;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px 7px 5px;
+  cursor: pointer;
+  min-width: 44px;
+  font-size: 128px;
+  padding: 8px 16px;
+}
+button:hover {
+  background: blue;
+}
+#carCanvas {
+  background: lightgray;
+  /* transform: scale(2); */
+}
+
+#controls,
+#settings,
+#info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+  margin-left: 24px;
+  margin-top: 24px;
+  gap: 36px;
+}
+
+#side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#progressBar {
+  background: grey;
+  border-radius: 5px;
+  height: 5px;
+  width: 100px;
+  margin-top: 2px;
+}
+#progress {
+  background: #52fd00;
+  border-radius: 5px;
+  height: 5px;
+  width: 0;
+}
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.control-buttons div {
+  margin-bottom: 24px;
+}
