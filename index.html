@@ -26,32 +26,32 @@
         <div id="controls">
             <h3>Controls</h3>
             <div class="control-buttons">
+                <div>
+                    <label for="randomization">Mutation</label>
+                    <select name="rates" id="randomization">
+                        <option value="0.0125">Very Low</option>
+                        <option value="0.025">Low</option>
+                        <option selected value="0.05">Medium</option>
+                        <option value="0.1">High</option>
+                        <option value="0.2">Very High</option>
+                    </select>
+                </div>
                 <div class="flex items-center gap-m">
-                    <button onclick="location.reload()">🔄</button>
+                    <button onclick="start()">🔄</button>
                     <p>New batch</p>
                 </div>
                 <div class="flex items-center gap-m">
-                    <button onclick="save();location.reload()">💾</button>
+                    <button onclick="save()">💾</button>
                     <p>Save best car</p>
-                </div>
-                <div class="flex items-center gap-m">
-                    <button onclick="discard()">🗑️</button>
-                    <p>Start over</p>
                 </div>
                 <div class="flex items-center gap-m">
                     <button onclick="newTraffic()">🚦</button>
                     <p>New traffic</p>
                 </div>
-            </div>
-            <div>
-                <label for="randomization">Mutation</label>
-                <select name="rates" id="randomization">
-                    <option value="0.0125">Very Low</option>
-                    <option value="0.025">Low</option>
-                    <option selected value="0.05">Medium</option>
-                    <option value="0.1">High</option>
-                    <option value="0.2">Very High</option>
-                </select>
+                <div class="flex items-center gap-m">
+                    <button onclick="discard()">🗑️</button>
+                    <p>Start over</p>
+                </div>
             </div>
         </div>
         <div id="settings">

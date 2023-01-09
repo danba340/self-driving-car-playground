@@ -1,4 +1,4 @@
-const NETWORK_CHANGE = getRandomization()
+let randomization = getRandomization()
 const SENSOR_COUNT = getSensorCount()
 const SENSOR_ANGLE = getSensorAngle()
 const SENSOR_LENGTH = getSensorLength()
@@ -17,9 +17,10 @@ const randomizationSelect = document.getElementById('randomization')
 const sensorCountSelect = document.getElementById('sensors')
 const sensorAngleSelect = document.getElementById('sensor-angle')
 const sensorLengthSelect = document.getElementById('sensor-length')
-randomizationSelect.value = NETWORK_CHANGE
+randomizationSelect.value = randomization
 randomizationSelect.onchange = (e) => {
     setRandomization(parseFloat(e.target.value))
+    start()
 }
 sensorCountSelect.value = SENSOR_COUNT
 sensorCountSelect.onchange = (e) => {
@@ -42,67 +43,56 @@ const generations = getGenerations()
 const generationsEl = document.getElementById('generation')
 generationsEl.innerText = generations
 
-
-
 const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9);
 
 const N = 100;
-const cars = generateCars(N);
-let bestCar = cars[0];
-if (localStorage.getItem("bestBrain")) {
-    for (let i = 0; i < cars.length; i++) {
-        cars[i].brain = JSON.parse(
-            localStorage.getItem("bestBrain"));
 
-        if (i != 0) {
-            NeuralNetwork.mutate(cars[i].brain, NETWORK_CHANGE);
+// VARS
+let cars = []
+let bestCar = null
+let traffic = []
+
+function start() {
+    randomization = getRandomization()
+    cars = generateCars(N);
+    bestCar = cars[0];
+    if (localStorage.getItem("bestBrain")) {
+        for (let i = 0; i < cars.length; i++) {
+            cars[i].brain = JSON.parse(
+                localStorage.getItem("bestBrain"));
+
+            if (i != 0) {
+                NeuralNetwork.mutate(cars[i].brain, randomization);
+            }
         }
     }
+
+    traffic = getTraffic()
+
 }
-
-const traffic = getTraffic()
-// const traffic = [
-//     new Car(road.getLaneCenter(1), -100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(1), -900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(1), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -1300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -1700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(1), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -2100, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(1), -2500, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -2900, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(1), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -3300, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(0), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-//     new Car(road.getLaneCenter(2), -3700, carWidth, carHeight, "DUMMY", CANVAS_WIDTH / 200, getRandomColor()),
-// ];
-
+start()
 animate();
 
 function save() {
     localStorage.setItem("bestBrain",
         JSON.stringify(bestCar.brain));
     addGeneraton()
-    location.reload()
+    start()
 }
 
 function resetGenerations() {
     localStorage.setItem("generations",
         1);
+    generationsEl.innerText = '1'
 }
 
 function addGeneraton() {
     let current = localStorage.getItem("generations") || 1;
     localStorage.setItem("generations", parseInt(current) + 1);
+    generationsEl.innerText = parseInt(current) + 1
 }
 
 function getGenerations() {
@@ -110,9 +100,10 @@ function getGenerations() {
 }
 
 function discard() {
+    hasShownWin = false;
     localStorage.removeItem("bestBrain");
     resetGenerations()
-    location.reload()
+    start()
 }
 
 function setRandomization(v) {
@@ -178,7 +169,7 @@ function templateToTraffic(template) {
 function newTraffic() {
     const trafficTemplate = generateTrafficTemplate(20)
     setTraffic(trafficTemplate)
-    location.reload()
+    start()
 }
 
 function generateTrafficTemplate(rows) {
@@ -248,21 +239,13 @@ function animate(time) {
 }
 
 document.onkeydown = (event) => {
-    if (event.key === " ") {
-        save();
-        location.reload()
-    }
     if (event.key === "r") {
-        location.reload()
+        start();
     }
     if (event.key === "c") {
         discard()
     }
     if (event.key === "s") {
         save()
-    }
-    if (event.key === "Escape") {
-        discard()
-        location.reload()
     }
 }
